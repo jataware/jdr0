@@ -1,11 +1,11 @@
-# jdr
+# jdr0
 _SOTA performance on "DeepSearch" benchmarks in < 1500 lines of code_
 
 <p align="center">
   <img src="./assets/logo.png">
 </p>
 
-`jdr` is a minimalist "DeepSearch" reference implementation that achieves state-of-the-art performance on several benchmark datasets.  
+`jdr0` is a minimalist "DeepSearch" reference implementation that achieves state-of-the-art performance on several benchmark datasets.  
 
 Our goal was a system that "fits in your head" - this implementation is intended as a simple, strong starting point for building and testing more complex DeepSearch/DeepResearch approaches.
 
