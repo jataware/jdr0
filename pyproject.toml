@@ -1,0 +1,23 @@
+[project]
+authors = [{name = "bkj", email = "bkj.322@gmail.com"}]
+name = "jdr"
+requires-python = ">= 3.11"
+version = "0.1.0"
+dependencies = ["serpapi>=0.1.5,<0.2", "numpydoc>=1.8.0,<2", "httpx>=0.28.1,<0.29", "pandas>=2.3.0,<3", "rich>=14.0.0,<15", "datasets>=3.6.0,<4", "litellm>=1.73.6,<2", "vertexai>=1.71.1,<2", "arxiv>=2.1.0,<3", "pypdf>=4.0.0,<5", "requests>=2.31.0,<3"]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+jdr = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+python = "3.13.*"
+pip = ">=25.1.1,<26"

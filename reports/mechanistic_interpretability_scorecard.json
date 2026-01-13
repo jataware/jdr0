@@ -1,0 +1,646 @@
+{
+  "collected_data": {
+    "domain": "mechanistic interpretability",
+    "benchmarks": [
+      {
+        "name": "MIB: A Mechanistic Interpretability Benchmark",
+        "arxiv_id": "2504.13151",
+        "description": "A benchmark for comparing mechanistic interpretability (MI) methods in neural language models. It features two tracks: circuit localization, which evaluates how well methods discover causal subgraphs (circuits), and causal variable localization, which assesses the alignment of high-level conceptual variables with low-level neural features. It provides standardized datasets, models, and metrics to evaluate method efficacy.",
+        "tasks": [
+          "Circuit Localization: Indirect Object Identification (IOI)",
+          "Circuit Localization: Arithmetic (addition and subtraction)",
+          "Circuit Localization: Multiple-choice Question Answering (MCQA)",
+          "Circuit Localization: AI2 Reasoning Challenge (ARC) (Easy and Challenge subsets)",
+          "Causal Variable Localization: Indirect Object Identification (IOI) (disentangling subject token and position signals)",
+          "Causal Variable Localization: Arithmetic (two-digit addition, localizing 'carry-the-one' variable)",
+          "Causal Variable Localization: Multiple-choice Question Answering (MCQA) (localizing answer position and answer token)",
+          "Causal Variable Localization: RA VEL (Resolving Attribute\u2013Value Entanglements in Language Models) (disentangling country, continent, and language attributes of city entities)",
+          "Causal Variable Localization: AI2 Reasoning Challenge (ARC) (Easy) (localizing answer position and answer token)"
+        ],
+        "metrics": [
+          "Circuit Localization: Integrated Circuit Performance Ratio (CPR) (higher is better)",
+          "Circuit Localization: Integrated Circuit-Model Distance (CMD) (closer to 0 is better)",
+          "Circuit Localization: AUROC (on InterpBench-trained IOI model with known ground truth circuits)",
+          "Circuit Localization: Weighted edge count (for circuit size)",
+          "Causal Variable Localization: Interchange Intervention Accuracy (IIA) (for MCQA, ARC, Arithmetic, RA VEL; higher is better)",
+          "Causal Variable Localization: Mean-squared error (MSE) (for IOI; lower is better)"
+        ]
+      },
+      {
+        "name": "InterpBench: Semi-Synthetic Transformers for Evaluating Mechanistic Interpretability Techniques",
+        "arxiv_id": "2407.14494",
+        "description": "A collection of 86 semi-synthetic, yet realistic, transformers with known ground-truth circuits. It employs Strict Interchange Intervention Training (SIIT) to create models that implement specific RASP programs or simplified versions of known circuits (like IOI), enabling rigorous and controlled evaluation of circuit discovery techniques.",
+        "tasks": [
+          "85 Tracr circuits (algorithmic tasks such as: fraction of 'x' in input, word count, token classification by frequency, removing duplicate tokens, detecting spam, creating abbreviations, checking token length parity, calculating vowel/consonant ratio, alternating capitalization, reversing words, sequence reversal, token occurrence counting, numeric token tagging, identifying anagrams, sum of digits, absolute value, Fibonacci numbers, element comparison, sequence doubling/halving, incrementing/decrementing, hyperbolic functions, square root, setting elements to zero, mirroring sequences, factorial, cubing/cube root, rounding, multiplying by sequence length, sign assignment, trigonometric functions, division, negation, checking primality, subtracting constants, squaring, power of 2 check, binarization, token replacement, thresholding, prime factors, swapping elements, scaling, checking for squares, reflection, exponential function, next prime, setting elements to zero except one, last element with padding, divisibility by 3, checking multiples, clipping, logarithm, inserting zeros, sequence inversion, arcsine, arccosine, checking equality of elements).",
+          "Simplified Indirect Object Identification (IOI) circuit."
+        ],
+        "metrics": [
+          "Area Under the Curve (AUC) of ROC curves for edge-level (for circuit discovery techniques)",
+          "Node effect (percentage of times output changes when intervening on a node)",
+          "Normalized KL divergence (for categorical tasks)",
+          "Interchange Intervention Accuracy (IIA)",
+          "Strict Interchange Intervention Accuracy (SIIA)",
+          "Correlation coefficients between SIIT and 'natural' models' accuracy after ablation"
+        ]
+      }
+    ],
+    "results": {
+      "MIB: A Mechanistic Interpretability Benchmark": {
+        "benchmark": "MIB: A Mechanistic Interpretability Benchmark",
+        "results": [
+          {
+            "method": "Random",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.75,
+              "IOI_Qwen-2.5_CMD": 0.72,
+              "IOI_Gemma-2_CMD": 0.69,
+              "IOI_Llama-3.1_CMD": 0.74,
+              "Arithmetic_Llama-3.1_CMD": 0.75,
+              "MCQA_Qwen-2.5_CMD": 0.73,
+              "MCQA_Gemma-2_CMD": 0.68,
+              "MCQA_Llama-3.1_CMD": 0.74,
+              "ARC(E)_Gemma-2_CMD": 0.68,
+              "ARC(E)_Llama-3.1_CMD": 0.74,
+              "ARC(C)_Llama-3.1_CMD": 0.74,
+              "InterpBench_AUROC": 0.44,
+              "IOI_GPT-2_CPR": 0.25,
+              "IOI_Qwen-2.5_CPR": 0.28,
+              "IOI_Gemma-2_CPR": 0.3,
+              "IOI_Llama-3.1_CPR": 0.25,
+              "Arithmetic_Llama-3.1_CPR": 0.25,
+              "MCQA_Qwen-2.5_CPR": 0.27,
+              "MCQA_Gemma-2_CPR": 0.32,
+              "MCQA_Llama-3.1_CPR": 0.26,
+              "ARC(E)_Gemma-2_CPR": 0.32,
+              "ARC(E)_Llama-3.1_CPR": 0.26,
+              "ARC(C)_Llama-3.1_CPR": 0.25
+            },
+            "notes": "Baseline method. Scores are from the private test set for CMD/CPR and InterpBench AUROC from the benchmark paper."
+          },
+          {
+            "method": "EActP (CF)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.02,
+              "IOI_Qwen-2.5_CMD": 0.49,
+              "MCQA_Qwen-2.5_CMD": 0.36,
+              "InterpBench_AUROC": 0.28,
+              "IOI_GPT-2_CPR": 2.3,
+              "IOI_Qwen-2.5_CPR": 1.21,
+              "MCQA_Qwen-2.5_CPR": 0.85
+            },
+            "notes": "Edge Activation Patching with Counterfactual ablations. Scores are from the private test set."
+          },
+          {
+            "method": "EAP (mean)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.29,
+              "IOI_Qwen-2.5_CMD": 0.18,
+              "IOI_Gemma-2_CMD": 0.25,
+              "IOI_Llama-3.1_CMD": 0.04,
+              "Arithmetic_Llama-3.1_CMD": 0.07,
+              "MCQA_Qwen-2.5_CMD": 0.21,
+              "MCQA_Gemma-2_CMD": 0.2,
+              "MCQA_Llama-3.1_CMD": 0.16,
+              "ARC(E)_Gemma-2_CMD": 0.22,
+              "ARC(E)_Llama-3.1_CMD": 0.28,
+              "ARC(C)_Llama-3.1_CMD": 0.2,
+              "InterpBench_AUROC": 0.78,
+              "IOI_GPT-2_CPR": 0.29,
+              "IOI_Qwen-2.5_CPR": 0.71,
+              "IOI_Gemma-2_CPR": 0.68,
+              "IOI_Llama-3.1_CPR": 0.98,
+              "Arithmetic_Llama-3.1_CPR": 0.35,
+              "MCQA_Qwen-2.5_CPR": 0.29,
+              "MCQA_Gemma-2_CPR": 0.33,
+              "MCQA_Llama-3.1_CPR": 0.13,
+              "ARC(E)_Gemma-2_CPR": 0.26,
+              "ARC(E)_Llama-3.1_CPR": 0.34,
+              "ARC(C)_Llama-3.1_CPR": 0.8
+            },
+            "notes": "Edge Attribution Patching with mean ablations. Scores are from the private test set."
+          },
+          {
+            "method": "EAP (CF)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.03,
+              "IOI_Qwen-2.5_CMD": 0.15,
+              "IOI_Gemma-2_CMD": 0.06,
+              "IOI_Llama-3.1_CMD": 0.01,
+              "Arithmetic_Llama-3.1_CMD": 0.01,
+              "MCQA_Qwen-2.5_CMD": 0.07,
+              "MCQA_Gemma-2_CMD": 0.08,
+              "MCQA_Llama-3.1_CMD": 0.09,
+              "ARC(E)_Gemma-2_CMD": 0.04,
+              "ARC(E)_Llama-3.1_CMD": 0.11,
+              "ARC(C)_Llama-3.1_CMD": 0.18,
+              "InterpBench_AUROC": 0.73,
+              "IOI_GPT-2_CPR": 1.2,
+              "IOI_Qwen-2.5_CPR": 0.26,
+              "IOI_Gemma-2_CPR": 1.29,
+              "IOI_Llama-3.1_CPR": 0.85,
+              "Arithmetic_Llama-3.1_CPR": 0.55,
+              "MCQA_Qwen-2.5_CPR": 0.85,
+              "MCQA_Gemma-2_CPR": 1.49,
+              "MCQA_Llama-3.1_CPR": 1.0,
+              "ARC(E)_Gemma-2_CPR": 1.08,
+              "ARC(E)_Llama-3.1_CPR": 0.8,
+              "ARC(C)_Llama-3.1_CPR": 0.82
+            },
+            "notes": "Edge Attribution Patching with Counterfactual ablations. Scores are from the private test set."
+          },
+          {
+            "method": "EAP (OA)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.3,
+              "IOI_Qwen-2.5_CMD": 0.16,
+              "MCQA_Qwen-2.5_CMD": 0.11,
+              "InterpBench_AUROC": 0.77,
+              "IOI_GPT-2_CPR": 0.95,
+              "IOI_Qwen-2.5_CPR": 0.7,
+              "MCQA_Qwen-2.5_CPR": 0.29
+            },
+            "notes": "Edge Attribution Patching with Optimal ablations. Scores are from the private test set."
+          },
+          {
+            "method": "EAP-IG-inp. (CF)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.03,
+              "IOI_Qwen-2.5_CMD": 0.02,
+              "IOI_Gemma-2_CMD": 0.04,
+              "IOI_Llama-3.1_CMD": 0.01,
+              "Arithmetic_Llama-3.1_CMD": 0.0,
+              "MCQA_Qwen-2.5_CMD": 0.08,
+              "MCQA_Gemma-2_CMD": 0.06,
+              "MCQA_Llama-3.1_CMD": 0.14,
+              "ARC(E)_Gemma-2_CMD": 0.04,
+              "ARC(E)_Llama-3.1_CMD": 0.11,
+              "ARC(C)_Llama-3.1_CMD": 0.22,
+              "InterpBench_AUROC": 0.71,
+              "IOI_GPT-2_CPR": 1.85,
+              "IOI_Qwen-2.5_CPR": 1.63,
+              "IOI_Gemma-2_CPR": 3.2,
+              "IOI_Llama-3.1_CPR": 2.08,
+              "Arithmetic_Llama-3.1_CPR": 0.99,
+              "MCQA_Qwen-2.5_CPR": 1.16,
+              "MCQA_Gemma-2_CPR": 1.64,
+              "MCQA_Llama-3.1_CPR": 1.05,
+              "ARC(E)_Gemma-2_CPR": 1.53,
+              "ARC(E)_Llama-3.1_CPR": 1.04,
+              "ARC(C)_Llama-3.1_CPR": 0.98
+            },
+            "notes": "Edge Attribution Patching with Integrated Gradients (interpolating inputs) and Counterfactual ablations. Scores are from the private test set."
+          },
+          {
+            "method": "EAP-IG-act. (CF)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.03,
+              "IOI_Qwen-2.5_CMD": 0.01,
+              "IOI_Gemma-2_CMD": 0.03,
+              "IOI_Llama-3.1_CMD": 0.01,
+              "Arithmetic_Llama-3.1_CMD": 0.0,
+              "MCQA_Qwen-2.5_CMD": 0.05,
+              "MCQA_Gemma-2_CMD": 0.07,
+              "MCQA_Llama-3.1_CMD": 0.13,
+              "ARC(E)_Gemma-2_CMD": 0.04,
+              "ARC(E)_Llama-3.1_CMD": 0.3,
+              "ARC(C)_Llama-3.1_CMD": 0.37,
+              "InterpBench_AUROC": 0.81,
+              "IOI_GPT-2_CPR": 1.82,
+              "IOI_Qwen-2.5_CPR": 1.63,
+              "IOI_Gemma-2_CPR": 2.07,
+              "IOI_Llama-3.1_CPR": 1.6,
+              "Arithmetic_Llama-3.1_CPR": 0.98,
+              "MCQA_Qwen-2.5_CPR": 0.77,
+              "MCQA_Gemma-2_CPR": 1.57,
+              "MCQA_Llama-3.1_CPR": 0.79,
+              "ARC(E)_Gemma-2_CPR": 1.7,
+              "ARC(E)_Llama-3.1_CPR": 0.71,
+              "ARC(C)_Llama-3.1_CPR": 0.63
+            },
+            "notes": "Edge Attribution Patching with Integrated Gradients (interpolating activations) and Counterfactual ablations. Scores are from the private test set."
+          },
+          {
+            "method": "NAP (CF)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.38,
+              "IOI_Qwen-2.5_CMD": 0.33,
+              "IOI_Gemma-2_CMD": 0.37,
+              "IOI_Llama-3.1_CMD": 0.29,
+              "Arithmetic_Llama-3.1_CMD": 0.28,
+              "MCQA_Qwen-2.5_CMD": 0.3,
+              "MCQA_Gemma-2_CMD": 0.35,
+              "MCQA_Llama-3.1_CMD": 0.32,
+              "ARC(E)_Gemma-2_CMD": 0.33,
+              "ARC(E)_Llama-3.1_CMD": 0.69,
+              "ARC(C)_Llama-3.1_CMD": 0.69,
+              "InterpBench_AUROC": 0.3,
+              "IOI_GPT-2_CPR": 0.28,
+              "IOI_Qwen-2.5_CPR": 0.3,
+              "IOI_Gemma-2_CPR": 0.3,
+              "IOI_Llama-3.1_CPR": 0.26,
+              "Arithmetic_Llama-3.1_CPR": 0.27,
+              "MCQA_Qwen-2.5_CPR": 0.38,
+              "MCQA_Gemma-2_CPR": 1.47,
+              "MCQA_Llama-3.1_CPR": 1.69,
+              "ARC(E)_Gemma-2_CPR": 1.01,
+              "ARC(E)_Llama-3.1_CPR": 0.26,
+              "ARC(C)_Llama-3.1_CPR": 0.26
+            },
+            "notes": "Node Attribution Patching with Counterfactual ablations. Scores are from the private test set."
+          },
+          {
+            "method": "NAP-IG (CF)",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.27,
+              "IOI_Qwen-2.5_CMD": 0.2,
+              "IOI_Gemma-2_CMD": 0.26,
+              "IOI_Llama-3.1_CMD": 0.19,
+              "Arithmetic_Llama-3.1_CMD": 0.18,
+              "MCQA_Qwen-2.5_CMD": 0.18,
+              "MCQA_Gemma-2_CMD": 0.29,
+              "MCQA_Llama-3.1_CMD": 0.33,
+              "ARC(E)_Gemma-2_CMD": 0.28,
+              "ARC(E)_Llama-3.1_CMD": 0.67,
+              "ARC(C)_Llama-3.1_CMD": 0.67,
+              "InterpBench_AUROC": 0.62,
+              "IOI_GPT-2_CPR": 0.76,
+              "IOI_Qwen-2.5_CPR": 0.29,
+              "IOI_Gemma-2_CPR": 1.52,
+              "IOI_Llama-3.1_CPR": 0.42,
+              "Arithmetic_Llama-3.1_CPR": 0.39,
+              "MCQA_Qwen-2.5_CPR": 0.77,
+              "MCQA_Gemma-2_CPR": 1.71,
+              "MCQA_Llama-3.1_CPR": 1.87,
+              "ARC(E)_Gemma-2_CPR": 1.53,
+              "ARC(E)_Llama-3.1_CPR": 0.26,
+              "ARC(C)_Llama-3.1_CPR": 0.26
+            },
+            "notes": "Node Attribution Patching with Integrated Gradients and Counterfactual ablations. Scores are from the private test set."
+          },
+          {
+            "method": "IFR",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.42,
+              "IOI_Qwen-2.5_CMD": 0.69,
+              "IOI_Gemma-2_CMD": 0.75,
+              "IOI_Llama-3.1_CMD": 0.83,
+              "Arithmetic_Llama-3.1_CMD": 0.22,
+              "MCQA_Qwen-2.5_CMD": 0.6,
+              "MCQA_Gemma-2_CMD": 0.62,
+              "MCQA_Llama-3.1_CMD": 0.48,
+              "ARC(E)_Gemma-2_CMD": 0.66,
+              "ARC(E)_Llama-3.1_CMD": 0.64,
+              "ARC(C)_Llama-3.1_CMD": 0.76,
+              "InterpBench_AUROC": 0.71,
+              "IOI_GPT-2_CPR": 0.58,
+              "IOI_Qwen-2.5_CPR": 0.31,
+              "IOI_Gemma-2_CPR": 0.25,
+              "IOI_Llama-3.1_CPR": 0.09,
+              "Arithmetic_Llama-3.1_CPR": 0.89,
+              "MCQA_Qwen-2.5_CPR": 0.4,
+              "MCQA_Gemma-2_CPR": 0.38,
+              "MCQA_Llama-3.1_CPR": 0.52,
+              "ARC(E)_Gemma-2_CPR": 0.34,
+              "ARC(E)_Llama-3.1_CPR": 0.36,
+              "ARC(C)_Llama-3.1_CPR": 0.24
+            },
+            "notes": "Information Flow Routes. Scores are from the private test set."
+          },
+          {
+            "method": "UGS",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.03,
+              "IOI_Qwen-2.5_CMD": 0.03,
+              "MCQA_Qwen-2.5_CMD": 0.2,
+              "InterpBench_AUROC": 0.74,
+              "IOI_GPT-2_CPR": 0.97,
+              "IOI_Qwen-2.5_CPR": 0.98,
+              "MCQA_Qwen-2.5_CPR": 1.17
+            },
+            "notes": "Uniform Gradient Sampling. Scores are from the private test set."
+          },
+          {
+            "method": "DAS",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "ARC(E)_Gemma-2_OAnswer_IIA": 0.88,
+              "ARC(E)_Gemma-2_XOrder_IIA": 0.76,
+              "ARC(E)_Llama-3.1_OAnswer_IIA": 0.88,
+              "ARC(E)_Llama-3.1_XOrder_IIA": 0.74,
+              "Arithmetic(+)_Gemma-2_XCarry_IIA": 0.31,
+              "Arithmetic(+)_Llama-3.1_XCarry_IIA": 0.54,
+              "MCQA_Gemma-2_OAnswer_IIA": 0.95,
+              "MCQA_Gemma-2_XOrder_IIA": 0.77,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.94,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.77,
+              "MCQA_Qwen-2.5_OAnswer_IIA": 0.86,
+              "MCQA_Qwen-2.5_XOrder_IIA": 0.78,
+              "IOI_GPT-2_SPos_MSE": 2.2,
+              "IOI_GPT-2_STok_MSE": 2.08,
+              "RAVEL_Gemma-2_ACont_IIA": 0.75,
+              "RAVEL_Gemma-2_ACountry_IIA": 0.57,
+              "RAVEL_Gemma-2_ALang_IIA": 0.62,
+              "RAVEL_Llama-3.1_ACont_IIA": 0.75,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.58,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.63
+            },
+            "notes": "Distributed Alignment Search. Scores are mean across counterfactual datasets and layers."
+          },
+          {
+            "method": "DBM",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "ARC(E)_Gemma-2_OAnswer_IIA": 0.82,
+              "ARC(E)_Gemma-2_XOrder_IIA": 0.63,
+              "ARC(E)_Llama-3.1_OAnswer_IIA": 0.85,
+              "ARC(E)_Llama-3.1_XOrder_IIA": 0.69,
+              "Arithmetic(+)_Gemma-2_XCarry_IIA": 0.33,
+              "Arithmetic(+)_Llama-3.1_XCarry_IIA": 0.47,
+              "MCQA_Gemma-2_OAnswer_IIA": 0.84,
+              "MCQA_Gemma-2_XOrder_IIA": 0.63,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.86,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.66,
+              "MCQA_Qwen-2.5_OAnswer_IIA": 0.46,
+              "MCQA_Qwen-2.5_XOrder_IIA": 0.6,
+              "IOI_GPT-2_SPos_MSE": 2.22,
+              "IOI_GPT-2_STok_MSE": 2.35,
+              "RAVEL_Gemma-2_ACont_IIA": 0.66,
+              "RAVEL_Gemma-2_ACountry_IIA": 0.53,
+              "RAVEL_Gemma-2_ALang_IIA": 0.54,
+              "RAVEL_Llama-3.1_ACont_IIA": 0.68,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.53,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.58
+            },
+            "notes": "Desiderata-based Masking on standard hidden dimensions. Scores are mean across counterfactual datasets and layers."
+          },
+          {
+            "method": "DBM + PCA",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "ARC(E)_Gemma-2_OAnswer_IIA": 0.78,
+              "ARC(E)_Gemma-2_XOrder_IIA": 0.64,
+              "ARC(E)_Llama-3.1_OAnswer_IIA": 0.84,
+              "ARC(E)_Llama-3.1_XOrder_IIA": 0.72,
+              "Arithmetic(+)_Gemma-2_XCarry_IIA": 0.32,
+              "Arithmetic(+)_Llama-3.1_XCarry_IIA": 0.37,
+              "MCQA_Gemma-2_OAnswer_IIA": 0.57,
+              "MCQA_Gemma-2_XOrder_IIA": 0.52,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.65,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.53,
+              "MCQA_Qwen-2.5_OAnswer_IIA": 0.22,
+              "MCQA_Qwen-2.5_XOrder_IIA": 0.54,
+              "IOI_GPT-2_SPos_MSE": 2.24,
+              "IOI_GPT-2_STok_MSE": 2.33,
+              "RAVEL_Gemma-2_ACont_IIA": 0.63,
+              "RAVEL_Gemma-2_ACountry_IIA": 0.47,
+              "RAVEL_Gemma-2_ALang_IIA": 0.5,
+              "RAVEL_Llama-3.1_ACont_IIA": 0.62,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.48,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.53
+            },
+            "notes": "Desiderata-based Masking on PCA features. Scores are mean across counterfactual datasets and layers."
+          },
+          {
+            "method": "DBM + SAE",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "ARC(E)_Gemma-2_OAnswer_IIA": 0.7,
+              "ARC(E)_Gemma-2_XOrder_IIA": 0.54,
+              "ARC(E)_Llama-3.1_OAnswer_IIA": 0.74,
+              "ARC(E)_Llama-3.1_XOrder_IIA": 0.55,
+              "Arithmetic(+)_Gemma-2_XCarry_IIA": 0.32,
+              "Arithmetic(+)_Llama-3.1_XCarry_IIA": 0.38,
+              "MCQA_Gemma-2_OAnswer_IIA": 0.73,
+              "MCQA_Gemma-2_XOrder_IIA": 0.51,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.8,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.58,
+              "RAVEL_Gemma-2_ACont_IIA": 0.64,
+              "RAVEL_Gemma-2_ACountry_IIA": 0.49,
+              "RAVEL_Gemma-2_ALang_IIA": 0.53,
+              "RAVEL_Llama-3.1_ACont_IIA": 0.64,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.5,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.55
+            },
+            "notes": "Desiderata-based Masking on Sparse Autoencoder (SAE) features. Scores are mean across counterfactual datasets and layers. Some scores are missing due to tractability constraints."
+          },
+          {
+            "method": "Full Vector",
+            "arxiv_id": "2504.13151",
+            "scores": {
+              "ARC(E)_Gemma-2_OAnswer_IIA": 0.63,
+              "ARC(E)_Gemma-2_XOrder_IIA": 0.43,
+              "ARC(E)_Llama-3.1_OAnswer_IIA": 0.68,
+              "ARC(E)_Llama-3.1_XOrder_IIA": 0.47,
+              "Arithmetic(+)_Gemma-2_XCarry_IIA": 0.29,
+              "Arithmetic(+)_Llama-3.1_XCarry_IIA": 0.35,
+              "MCQA_Gemma-2_OAnswer_IIA": 0.61,
+              "MCQA_Gemma-2_XOrder_IIA": 0.44,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.77,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.46,
+              "MCQA_Qwen-2.5_OAnswer_IIA": 0.35,
+              "MCQA_Qwen-2.5_XOrder_IIA": 0.49,
+              "IOI_GPT-2_SPos_MSE": 2.45,
+              "IOI_GPT-2_STok_MSE": 2.82,
+              "RAVEL_Gemma-2_ACont_IIA": 0.48,
+              "RAVEL_Gemma-2_ACountry_IIA": 0.49,
+              "RAVEL_Gemma-2_ALang_IIA": 0.45,
+              "RAVEL_Llama-3.1_ACont_IIA": 0.53,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.47,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.47
+            },
+            "notes": "Identity featurizer, intervening on the full untransformed hidden vector. Scores are mean across counterfactual datasets and layers."
+          },
+          {
+            "method": "P-Ens (Mondorf et al., 2025)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.02,
+              "IOI_Qwen-2.5_CMD": 0.02,
+              "MCQA_Qwen-2.5_CMD": 0.07,
+              "IOI_GPT-2_CPR": 2.11,
+              "IOI_Qwen-2.5_CPR": 1.88,
+              "MCQA_Qwen-2.5_CPR": 0.79
+            },
+            "notes": "Parallel Ensembling (merges scores from EAP, EAP-IG-inputs, EAP-IG-activations) for circuit localization. Scores are from the private test set of the shared task."
+          },
+          {
+            "method": "S-Ens (Mondorf et al., 2025)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.03,
+              "IOI_Qwen-2.5_CMD": 0.02,
+              "MCQA_Qwen-2.5_CMD": 0.07,
+              "IOI_GPT-2_CPR": 2.37,
+              "IOI_Qwen-2.5_CPR": 1.71,
+              "MCQA_Qwen-2.5_CPR": 1.16
+            },
+            "notes": "Sequential Ensembling (uses EAP-IG-inputs to warm-start edge pruning) for circuit localization. Scores are from the private test set of the shared task."
+          },
+          {
+            "method": "Hybrid-Ens (Mondorf et al., 2025)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.03,
+              "IOI_Qwen-2.5_CMD": 0.02,
+              "MCQA_Qwen-2.5_CMD": 0.04,
+              "IOI_GPT-2_CPR": 2.43,
+              "IOI_Qwen-2.5_CPR": 1.88,
+              "MCQA_Qwen-2.5_CPR": 1.19
+            },
+            "notes": "Hybrid Ensembling (combines parallel and sequential strategies) for circuit localization. Scores are from the private test set of the shared task."
+          },
+          {
+            "method": "ILP + PNR + Bootstrapping (Nikankin et al., 2025a)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.02,
+              "IOI_Qwen-2.5_CMD": 0.01,
+              "IOI_Gemma-2_CMD": 0.04,
+              "IOI_Llama-3.1_CMD": 0.01,
+              "Arithmetic_Llama-3.1_CMD": 0.01,
+              "MCQA_Qwen-2.5_CMD": 0.08,
+              "MCQA_Gemma-2_CMD": 0.07,
+              "MCQA_Llama-3.1_CMD": 0.45,
+              "ARC(E)_Gemma-2_CMD": 0.03,
+              "IOI_GPT-2_CPR": 1.89,
+              "IOI_Qwen-2.5_CPR": 1.71,
+              "IOI_Gemma-2_CPR": 3.01,
+              "IOI_Llama-3.1_CPR": 2.39,
+              "Arithmetic_Llama-3.1_CPR": 1.04,
+              "MCQA_Qwen-2.5_CPR": 1.04,
+              "MCQA_Gemma-2_CPR": 1.7,
+              "MCQA_Llama-3.1_CPR": 1.22,
+              "ARC(E)_Gemma-2_CPR": 1.63
+            },
+            "notes": "Improved edge selection using Integer Linear Programming, Positive-Negative Ratio strategy, and Bootstrapping for circuit localization. Scores are from the private test set of the shared task."
+          },
+          {
+            "method": "IPE (CF) (Brunello et al., 2025)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.02,
+              "IOI_Qwen-2.5_CMD": 0.57,
+              "Arithmetic_Llama-3.1_CMD": 0.54,
+              "IOI_GPT-2_CPR": 2.24,
+              "IOI_Qwen-2.5_CPR": 0.35,
+              "Arithmetic_Llama-3.1_CPR": 0.45
+            },
+            "notes": "Isolating Path Effects (IPE) for circuit localization. Scores are from the private test set of the shared task."
+          },
+          {
+            "method": "Orthogonal non-linear projection (Hirlimann et al., 2025)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "RAVEL_Llama-3.1_ACont_IIA": 0.84,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.7,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.72,
+              "Arithmetic(+)_Llama-3.1_XCarry_IIA": 0.53,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.9,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.78,
+              "MCQA_Qwen-2.5_OAnswer_IIA": 0.9,
+              "MCQA_Qwen-2.5_XOrder_IIA": 0.78
+            },
+            "notes": "A simplified variant of the non-linear featurizer for causal variable localization, extending DAS. Scores are mean across counterfactual datasets and layers."
+          },
+          {
+            "method": "Non-linear featurizer (Hirlimann et al., 2025)",
+            "arxiv_id": "2511.18409",
+            "scores": {
+              "RAVEL_Llama-3.1_ACont_IIA": 0.83,
+              "RAVEL_Llama-3.1_ACountry_IIA": 0.7,
+              "RAVEL_Llama-3.1_ALang_IIA": 0.72,
+              "MCQA_Llama-3.1_OAnswer_IIA": 0.95,
+              "MCQA_Llama-3.1_XOrder_IIA": 0.81,
+              "MCQA_Qwen-2.5_OAnswer_IIA": 0.89,
+              "MCQA_Qwen-2.5_XOrder_IIA": 0.81
+            },
+            "notes": "Extends DAS with a multi-layer perceptron and non-linearities for causal variable localization. Scores are mean across counterfactual datasets and layers."
+          },
+          {
+            "method": "ILP + PNR (Nikankin et al., 2025a)",
+            "arxiv_id": "2510.25786",
+            "scores": {
+              "IOI_GPT-2_CMD": 0.0294,
+              "IOI_Qwen-2.5_CMD": 0.037,
+              "IOI_Gemma-2_CMD": 0.076,
+              "MCQA_Qwen-2.5_CMD": 0.182,
+              "MCQA_Gemma-2_CMD": 0.0907,
+              "ARC(E)_Gemma-2_CMD": 0.0451
+            },
+            "notes": "Integer Linear Programming for circuit construction combined with Positive-Negative Ratio strategy for edge selection for circuit localization. Scores are from the public test set."
+          },
+          {
+            "method": "ILP + Bootstrapping (Nikankin et al., 2025a)",
+            "arxiv_id": "2510.25786",
+            "scores": {
+              "IOI_GPT-2_CPR": 2.5061,
+              "IOI_Qwen-2.5_CPR": 2.5092,
+              "IOI_Gemma-2_CPR": 5.4516,
+              "MCQA_Qwen-2.5_CPR": 1.0926,
+              "MCQA_Gemma-2_CPR": 1.9145,
+              "ARC(E)_Gemma-2_CPR": 1.8918
+            },
+            "notes": "Integer Linear Programming combined with Bootstrapping to filter unstable edges for circuit localization. Scores are from the public test set."
+          }
+        ]
+      },
+      "InterpBench: Semi-Synthetic Transformers for Evaluating Mechanistic Interpretability Techniques": {
+        "benchmark": "InterpBench: Semi-Synthetic Transformers for Evaluating Mechanistic Interpretability Techniques",
+        "results": [
+          {
+            "method": "Automatic Circuit DisCovery (ACDC)",
+            "arxiv_id": "2407.14494",
+            "scores": {
+              "Edge-level ROC AUC": 0.85
+            },
+            "notes": "ACDC is statistically significantly better than Node SP, Edge SP, and EAP. It is statistically indistinguishable from EAP with integrated gradients. (Based on Wilcoxon-Mann-Whitney U-test p-values < 0.05 for comparisons with Node SP, Edge SP, and EAP; p-value >= 0.05 for EAP-IG. Vargha-Delaney A12 effect sizes: ACDC vs Node SP: 0.742 (Large); ACDC vs Edge SP: 0.541 (Small); ACDC vs EAP: 0.91 (Large); ACDC vs EAP-IG: 0.555 (Small))."
+          },
+          {
+            "method": "Subnetwork Probing (SP)",
+            "arxiv_id": "2407.14494",
+            "scores": {
+              "Edge-level ROC AUC": 0.5
+            },
+            "notes": "Node SP is statistically significantly worse than ACDC. (Based on Wilcoxon-Mann-Whitney U-test p-value = 0.000427 < 0.05. Vargha-Delaney A12 effect size: ACDC vs Node SP: 0.742 (Large))."
+          },
+          {
+            "method": "Edgewise Subnetwork Probing (Edgewise SP)",
+            "arxiv_id": "2407.14494",
+            "scores": {
+              "Edge-level ROC AUC": 0.6
+            },
+            "notes": "Edgewise SP is statistically significantly worse than ACDC. (Based on Wilcoxon-Mann-Whitney U-test p-value = 0.028417 < 0.05. Vargha-Delaney A12 effect size: ACDC vs Edge SP: 0.541 (Small))."
+          },
+          {
+            "method": "Edge Attribution Patching (EAP)",
+            "arxiv_id": "2407.14494",
+            "scores": {
+              "Edge-level ROC AUC": 0.3
+            },
+            "notes": "EAP performs poorly and is statistically significantly worse than ACDC. (Based on Wilcoxon-Mann-Whitney U-test p-value = 0.000061 < 0.05. Vargha-Delaney A12 effect size: ACDC vs EAP: 0.91 (Large))."
+          },
+          {
+            "method": "Edge Attribution Patching with integrated gradients (EAP-ig)",
+            "arxiv_id": "2407.14494",
+            "scores": {
+              "Edge-level ROC AUC": 0.8
+            },
+            "notes": "EAP-ig is a strong contender against ACDC and is statistically indistinguishable from it. (Based on Wilcoxon-Mann-Whitney U-test p-value = 0.099481 >= 0.05. Vargha-Delaney A12 effect size: ACDC vs EAP-IG: 0.555 (Small))."
+          }
+        ]
+      }
+    }
+  },
+  "final_scorecard": "<output>\n    <answer>\n    This scorecard synthesizes the provided benchmark and results data for mechanistic interpretability methods. It covers two key benchmarks: MIB and InterpBench, evaluating methods across circuit localization and causal variable localization tasks.\n\n### 1. Benchmark Overview Table\n\n| Benchmark Name | ArXiv ID | Description | Tasks | Key Metrics |\n| :------------- | :------- | :---------- | :---- | :---------- |\n| **MIB: A Mechanistic Interpretability Benchmark** | 2504.13151 | A benchmark for comparing mechanistic interpretability (MI) methods in neural language models. It features two tracks: circuit localization, which evaluates how well methods discover causal subgraphs (circuits), and causal variable localization, which assesses the alignment of high-level conceptual variables with low-level neural features. It provides standardized datasets, models, and metrics to evaluate method efficacy. | **Circuit Localization:** Indirect Object Identification (IOI), Arithmetic (addition and subtraction), Multiple-choice Question Answering (MCQA), AI2 Reasoning Challenge (ARC) (Easy and Challenge subsets)<br>**Causal Variable Localization:** IOI (disentangling subject token and position signals), Arithmetic (two-digit addition, localizing 'carry-the-one' variable), MCQA (localizing answer position and answer token), RA VEL (Resolving Attribute\u2013Value Entanglements in Language Models) (disentangling country, continent, and language attributes of city entities), ARC (Easy) (localizing answer position and answer token) | **Circuit Localization:** Integrated Circuit Performance Ratio (CPR) (higher is better), Integrated Circuit-Model Distance (CMD) (closer to 0 is better), AUROC (on InterpBench-trained IOI model with known ground truth circuits), Weighted edge count (for circuit size)<br>**Causal Variable Localization:** Interchange Intervention Accuracy (IIA) (for MCQA, ARC, Arithmetic, RA VEL; higher is better), Mean-squared error (MSE) (for IOI; lower is better) |\n| **InterpBench: Semi-Synthetic Transformers for Evaluating Mechanistic Interpretability Techniques** | 2407.14494 | A collection of 86 semi-synthetic, yet realistic, transformers with known ground-truth circuits. It employs Strict Interchange Intervention Training (SIIT) to create models that implement specific RASP programs or simplified versions of known circuits (like IOI), enabling rigorous and controlled evaluation of circuit discovery techniques. | 85 Tracr circuits (algorithmic tasks like word count, token classification, sequence reversal, Fibonacci numbers, etc.), Simplified Indirect Object Identification (IOI) circuit. | Area Under the Curve (AUC) of ROC curves for edge-level (for circuit discovery techniques), Node effect (percentage of times output changes when intervening on a node), Normalized KL divergence (for categorical tasks), Interchange Intervention Accuracy (IIA), Strict Interchange Intervention Accuracy (SIIA), Correlation coefficients between SIIT and 'natural' models' accuracy after ablation |\n\n### 2. Leaderboard Tables\n\n#### MIB: A Mechanistic Interpretability Benchmark\n\n**Circuit Localization - Integrated Circuit-Model Distance (CMD)** (Lower is better)\n\n| Rank | Method | Average CMD | Average CPR (Higher is better) | InterpBench AUROC (Higher is better) |\n| :--- | :----- | :---------- | :----------------------------- | :----------------------------------- |\n| **1** | **EAP-IG-act. (CF)** | **0.07** | **1.21** | **0.81** |\n| 2 | EAP-IG-inp. (CF) | 0.07 | 1.62 | 0.71 |\n| 3 | Hybrid-Ens (Mondorf et al., 2025) | 0.03 | 1.83 | N/A |\n| 4 | P-Ens (Mondorf et al., 2025) | 0.04 | 1.59 | N/A |\n| 5 | S-Ens (Mondorf et al., 2025) | 0.04 | 1.76 | N/A |\n| 6 | ILP + PNR + Bootstrapping (Nikankin et al., 2025a) | 0.09 | 1.77 | N/A |\n| 7 | ILP + PNR (Nikankin et al., 2025a) | 0.08 | N/A | N/A |\n| 8 | UGS | 0.09 | 1.04 | 0.74 |\n| 9 | EAP (CF) | 0.10 | 0.90 | 0.73 |\n| 10 | IPE (CF) (Brunello et al., 2025) | 0.38 | 1.01 | N/A |\n| 11 | EActP (CF) | 0.29 | 1.45 | 0.28 |\n| 12 | EAP (mean) | 0.19 | 0.49 | 0.78 |\n| 13 | EAP (OA) | 0.19 | 0.65 | 0.77 |\n| 14 | ILP + Bootstrapping (Nikankin et al., 2025a) | N/A | 2.50 | N/A |\n| 15 | NAP-IG (CF) | 0.33 | 0.82 | 0.62 |\n| 16 | NAP (CF) | 0.43 | 0.52 | 0.30 |\n| 17 | IFR | 0.55 | 0.48 | 0.71 |\n| 18 | Random | 0.72 | 0.27 | 0.44 |\n\n**Causal Variable Localization - Interchange Intervention Accuracy (IIA)** (Higher is better)\n\n| Rank | Method | Average IIA | Average MSE (Lower is better) |\n| :--- | :----- | :---------- | :---------------------------- |\n| **1** | **DAS** | **0.70** | **2.14** |\n| 2 | Non-linear featurizer (Hirlimann et al., 2025) | 0.87 | N/A |\n| 3 | Orthogonal non-linear projection (Hirlimann et al., 2025) | 0.80 | N/A |\n| 4 | DBM | 0.64 | 2.29 |\n| 5 | DBM + PCA | 0.58 | 2.29 |\n| 6 | DBM + SAE | 0.60 | N/A |\n| 7 | Full Vector | 0.50 | 2.64 |\n\n#### InterpBench: Semi-Synthetic Transformers for Evaluating Mechanistic Interpretability Techniques\n\n**Circuit Discovery - Edge-level ROC AUC** (Higher is better)\n\n| Rank | Method | Edge-level ROC AUC | Notes (Statistical Significance vs. ACDC) |\n| :--- | :----- | :----------------- | :--------------------------------------- |\n| **1** | **Automatic Circuit DisCovery (ACDC)** | **0.85** | Significantly better than Node SP, Edge SP, and EAP. Indistinguishable from EAP-IG. |\n| 2 | Edge Attribution Patching with integrated gradients (EAP-ig) | 0.80 | Statistically indistinguishable from ACDC (p-value >= 0.05). |\n| 3 | Edgewise Subnetwork Probing (Edgewise SP) | 0.60 | Statistically significantly worse than ACDC (p-value < 0.05). |\n| 4 | Subnetwork Probing (SP) | 0.50 | Statistically significantly worse than ACDC (p-value < 0.05). |\n| 5 | Edge Attribution Patching (EAP) | 0.30 | Statistically significantly worse than ACDC (p-value < 0.05). |\n\n### 3. Method Summary\n\n*   **EAP-IG-act. (CF)**: Edge Attribution Patching with Integrated Gradients (interpolating activations) and Counterfactual ablations. This method stands out on MIB for Circuit Localization, achieving the best average CMD and the highest InterpBench AUROC score among the core EAP variants.\n*   **EAP-IG-inp. (CF)**: Edge Attribution Patching with Integrated Gradients (interpolating inputs) and Counterfactual ablations. A strong performer in MIB Circuit Localization, similar to `EAP-IG-act. (CF)`.\n*   **DAS (Distributed Alignment Search)**: Excels in MIB's Causal Variable Localization tasks, achieving the highest average IIA and strong MSE performance. It uses counterfactual datasets to find aligned features.\n*   **Automatic Circuit DisCovery (ACDC)**: The top performer on InterpBench for circuit discovery (edge-level ROC AUC). It is statistically significantly better than most other baselines on this benchmark.\n*   **EAP-ig (InterpBench Context)**: While EAP generally performs poorly on InterpBench, adding integrated gradients (EAP-ig) significantly boosts its performance, making it statistically indistinguishable from ACDC on InterpBench.\n*   **Ensembling Methods (P-Ens, S-Ens, Hybrid-Ens)**: These methods, particularly Hybrid-Ens, show competitive performance in MIB Circuit Localization, often improving upon individual EAP variants, indicating the benefit of combining different attribution strategies.\n*   **ILP-based methods (Nikankin et al., 2025a)**: Methods combining Integer Linear Programming (ILP) with Positive-Negative Ratio (PNR) and/or Bootstrapping also show very strong performance in MIB Circuit Localization, achieving low CMD and high CPR.\n*   **Orthogonal non-linear projection / Non-linear featurizer (Hirlimann et al., 2025)**: These are extensions of DAS, showing excellent IIA scores for causal variable localization on Llama-3.1, indicating advancements in disentangling conceptual variables.\n*   **DBM (Desiderata-based Masking)**: Performs reasonably well in MIB Causal Variable Localization, with variations like DBM + PCA and DBM + SAE exploring different feature spaces for interpretability.\n*   **Random / Full Vector**: Serve as baselines, consistently showing the worst performance across relevant metrics, highlighting the efficacy of actual interpretability methods.\n\n### 4. Gaps & Opportunities\n\n1.  **Comprehensive Cross-Benchmark Evaluation**: While methods are evaluated on MIB and InterpBench, there's no single method that appears at the top across *all* metrics and tasks within both benchmarks. For instance, ACDC excels on InterpBench, but isn't explicitly listed with top scores in MIB's primary leaderboards (though EAP-IG, a related technique, does well). This suggests methods might specialize, and a unified evaluation framework or further meta-analysis could highlight more generalizable techniques.\n2.  **Aggregation of Complex Metrics**: MIB has a rich set of tasks and models (e.g., IOI, Arithmetic, MCQA, ARC on GPT-2, Qwen, Gemma, Llama). Presenting an aggregated \"average CMD\" or \"average IIA\" provides a high-level view but might obscure nuances where a method performs exceptionally well on one specific task/model but poorly on others. More detailed sub-leaderboards for each task/model combination would be beneficial.\n3.  **Missing Scores for Specific Metrics/Tasks**: Several methods have \"N/A\" for certain scores (e.g., ensembling methods on InterpBench AUROC, DBM + SAE on some IIA tasks, DBM + PCA/DBM on MSE). This indicates incomplete evaluation coverage, which might be due to computational costs or method applicability. Filling these gaps would provide a more complete picture.\n4.  **Circuit Size/Sparsity Metrics**: The MIB description mentions \"Weighted edge count (for circuit size)\" as a metric, but this is not present in the results data. Understanding not just performance but also the *compactness* of discovered circuits is crucial for mechanistic interpretability. Evaluating methods on this aspect would add valuable insight.\n5.  **Long-Tail Tasks and Models**: While MIB covers several tasks and models, the \"85 Tracr circuits\" in InterpBench represent a vast array of algorithmic tasks. The InterpBench results currently only report an aggregated \"Edge-level ROC AUC.\" Deeper analysis into which *types* of Tracr circuits methods perform well or poorly on could reveal specific strengths and weaknesses.\n6.  **Real-world vs. Semi-Synthetic Benchmarks**: InterpBench uses semi-synthetic transformers with known ground truth, which is excellent for rigorous evaluation. MIB uses larger, pre-trained language models. Exploring how methods developed and evaluated on semi-synthetic data generalize to more complex, \"natural\" models without ground truth circuits remains a critical area.\n7.  **Efficiency and Resource Usage**: The current scorecard focuses on performance metrics. Future evaluations could incorporate metrics like computational cost, memory usage, or time to convergence for each method, especially given the scale of modern LMs. This would be important for practical adoption.\n\n</answer>\n    <citations>\n        <url>https://arxiv.org/pdf/2504.13151</url>\n        <url>https://arxiv.org/pdf/2407.14494</url>\n        <url>https://arxiv.org/pdf/2511.18409</url>\n        <url>https://arxiv.org/pdf/2510.25786</url>\n    </citations>\n</output>"
+}
