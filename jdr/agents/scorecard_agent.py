@@ -22,12 +22,16 @@ console = Console()
 # Stage-specific prompts
 STAGE1_DISCOVER_PROMPT = """Your task is to discover ALL major benchmarks and datasets used in {domain} research.
 
-Search arXiv thoroughly with multiple queries to find:
-1. Benchmark papers that introduce evaluation frameworks
-2. Survey/review papers that list existing benchmarks
-3. Papers that compare methods on standard datasets
+You MUST find at least {min_benchmarks} different benchmarks. Search arXiv thoroughly with MULTIPLE different queries:
 
-Output a JSON list of benchmarks found:
+1. Search for "{domain} benchmark" 
+2. Search for "{domain} evaluation dataset"
+3. Search for "{domain} survey" or "{domain} review" papers that list benchmarks
+4. Search for specific subtopics within {domain}
+
+For EACH search, fetch and read the most relevant papers to extract benchmark information.
+
+Output a JSON list of ALL benchmarks found (aim for {min_benchmarks}+):
 ```json
 {{
   "benchmarks": [
@@ -42,7 +46,7 @@ Output a JSON list of benchmarks found:
 }}
 ```
 
-Be exhaustive - search with different query variations to maximize coverage."""
+Be EXHAUSTIVE - do not stop until you have found at least {min_benchmarks} distinct benchmarks."""
 
 STAGE2_METHODS_PROMPT = """Your task is to find all methods evaluated on the benchmark: {benchmark_name}
 
@@ -89,10 +93,10 @@ Synthesize this into a comprehensive SOTA scorecard with:
 Format with clear markdown tables. Highlight SOTA results."""
 
 
-async def run_stage(agent, query, stage_name):
+async def run_stage(agent, query, stage_name, max_iters=10):
     """Run a single stage and return the final message content."""
     console.rule(f"[bold blue]{stage_name}[/bold blue]")
-    messages = await agent.arun(query, max_iters=10, verbose=True)
+    messages = await agent.arun(query, max_iters=max_iters, verbose=True)
     
     # Extract final answer
     final_content = messages[-1].get('content', '')
@@ -141,14 +145,23 @@ def extract_final_answer(content: str) -> str:
     return clean.strip()
 
 
-async def run_scorecard_pipeline(domain: str, max_benchmarks: int = 5):
+async def run_scorecard_pipeline(domain: str, max_benchmarks: int = 5, depth: str = "normal"):
     """
     Run the full multi-stage scorecard generation pipeline.
     
     Args:
         domain: Research domain (e.g., "mechanistic interpretability")
         max_benchmarks: Max benchmarks to deep-dive on in stage 2
+        depth: "quick" (fewer iterations), "normal", or "deep" (more thorough)
     """
+    
+    # Depth settings
+    depth_settings = {
+        "quick":  {"stage1_iters": 8,  "stage2_iters": 6,  "min_benchmarks": 3},
+        "normal": {"stage1_iters": 15, "stage2_iters": 10, "min_benchmarks": 5},
+        "deep":   {"stage1_iters": 25, "stage2_iters": 15, "min_benchmarks": 7},
+    }
+    settings = depth_settings.get(depth, depth_settings["normal"])
     
     # Create agent with arxiv tools
     agent = ToolCallAgent(
@@ -157,15 +170,21 @@ async def run_scorecard_pipeline(domain: str, max_benchmarks: int = 5):
             'aarxiv_search': aarxiv_search,
             'aarxiv_fetch': aarxiv_fetch,
         },
-        special_instructions='Use aarxiv_search and aarxiv_fetch to find papers. Be thorough.',
+        special_instructions='Use aarxiv_search and aarxiv_fetch to find papers. Be VERY thorough - do multiple searches with different queries.',
         do_double_check=False,
     )
     
     collected_data = {"domain": domain, "benchmarks": [], "results": {}}
     
     # =========== STAGE 1: Discover Benchmarks ===========
-    stage1_query = STAGE1_DISCOVER_PROMPT.format(domain=domain)
-    stage1_result = await run_stage(agent, stage1_query, "Stage 1: Discover Benchmarks")
+    stage1_query = STAGE1_DISCOVER_PROMPT.format(
+        domain=domain, 
+        min_benchmarks=settings["min_benchmarks"]
+    )
+    stage1_result = await run_stage(
+        agent, stage1_query, "Stage 1: Discover Benchmarks",
+        max_iters=settings["stage1_iters"]
+    )
     
     # Try to parse benchmarks
     stage1_json = await extract_json(stage1_result)
@@ -179,6 +198,7 @@ async def run_scorecard_pipeline(domain: str, max_benchmarks: int = 5):
     
     # =========== STAGE 2: Get Methods & Results for Each Benchmark ===========
     benchmarks_to_query = collected_data.get('benchmarks', [])[:max_benchmarks]
+    rprint(f"[blue]Deep-diving into {len(benchmarks_to_query)} benchmarks...[/blue]")
     
     for i, benchmark in enumerate(benchmarks_to_query):
         bench_name = benchmark.get('name', f'Benchmark {i+1}')
@@ -192,7 +212,8 @@ async def run_scorecard_pipeline(domain: str, max_benchmarks: int = 5):
         stage2_result = await run_stage(
             agent, 
             stage2_query, 
-            f"Stage 2: Methods for {bench_name}"
+            f"Stage 2 [{i+1}/{len(benchmarks_to_query)}]: Methods for {bench_name}",
+            max_iters=settings["stage2_iters"]
         )
         
         stage2_json = await extract_json(stage2_result)
@@ -237,15 +258,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate SOTA scorecard for a research domain")
     parser.add_argument("--domain", type=str, default="mechanistic interpretability",
                         help="Research domain to generate scorecard for")
-    parser.add_argument("--max-benchmarks", type=int, default=3,
+    parser.add_argument("--max-benchmarks", type=int, default=5,
                         help="Maximum benchmarks to deep-dive on")
+    parser.add_argument("--depth", type=str, default="normal", choices=["quick", "normal", "deep"],
+                        help="Search depth: quick (fast), normal (balanced), deep (thorough)")
     parser.add_argument("--output-dir", type=str, default="reports",
                         help="Output directory for results")
     parser.add_argument("--save-data", action="store_true",
                         help="Also save raw collected data as JSON")
     args = parser.parse_args()
     
-    result = asyncio.run(run_scorecard_pipeline(args.domain, args.max_benchmarks))
+    rprint(f"[bold]Generating {args.depth} scorecard for: {args.domain}[/bold]")
+    rprint(f"[dim]Max benchmarks: {args.max_benchmarks}[/dim]")
+    
+    result = asyncio.run(run_scorecard_pipeline(args.domain, args.max_benchmarks, args.depth))
     
     # Sanitize domain for filename
     domain_slug = args.domain.replace(' ', '_').lower()
